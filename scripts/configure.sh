@@ -2,7 +2,7 @@
 
 MUST_EXIT=0
 # create array with the files name
-declare -a arr=("BECAPE_HOST", "BECAPE_PORT", "BECAPE_DATABASE", "BECAPE_USER")
+declare -a arr=("BECAPE_MYSQL_HOST", "BECAPE_MYSQL_PORT", "BECAPE_MYSQL_DATABASE", "BECAPE_MYSQL_USER")
 ## now loop through the above array
 for variable in "${arr[@]}"
 do
@@ -25,12 +25,12 @@ echo "Starting configure .......... ready"
 START=$(date +%s)
 
 echo "Environment variables"
-echo "Host: ........${BECAPE_HOST}"
-echo "Port: ....... ${BECAPE_PORT}"
-echo "Database: ... ${BECAPE_DATABASE}"
-echo "User: ........${BECAPE_USER}"
+echo "Host: ........${BECAPE_MYSQL_HOST}"
+echo "Port: ....... ${BECAPE_MYSQL_PORT}"
+echo "Database: ... ${BECAPE_MYSQL_DATABASE}"
+echo "User: ........${BECAPE_MYSQL_USER}"
 
-mysql_config_editor set --login-path=backup --host=${BECAPE_HOST} --port=${BECAPE_PORT} --user=${BECAPE_USER} --password
+mysql_config_editor set --login-path=backup --host=${BECAPE_MYSQL_HOST} --port=${BECAPE_MYSQL_PORT} --user=${BECAPE_MYSQL_USER} --password
 
 echo "Coping new .mylogin.cnf ..... ready"
 cp ${BECAPE_DIR_HOME}/.mylogin.cnf ${BECAPE_DIR_VOLUME}/.mylogin.cnf

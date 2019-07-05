@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0542854b-fb86-48c5-97fc-f21ecb3e9a3c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/backup.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/backup.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/configure.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/configure.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/list.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/list.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/restore.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/restore.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,11 +35,47 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/scripts/list.sh">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Dockerfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+            <state relative-caret-position="274">
+              <caret line="15" column="24" lean-forward="true" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scripts/upload.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="168">
+              <caret line="12" column="28" lean-forward="true" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/restore.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="483">
+              <caret line="38" selection-start-line="38" selection-end-line="39" selection-end-column="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/backup.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="274">
+              <caret line="99" column="20" lean-forward="true" selection-start-line="99" selection-start-column="20" selection-end-line="99" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/configure.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="735">
+              <caret line="35" column="54" selection-start-line="35" selection-start-column="54" selection-end-line="35" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -44,20 +84,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>backup</find>
-      <find>V_PASSWORD</find>
-      <find>${V_DATABASE}</find>
-      <find>application</find>
-      <find>var/mysqldump-secure</find>
-      <find>//var/www/app/scripts/tmp</find>
-      <find>futura</find>
-      <find>FUNCTION</find>
-      <find>BACKUP</find>
-      <find>SERVICE_UID</find>
-      <find>V_DIR_BACKUP</find>
-      <find>V_DIR_RESTORE</find>
-      <find>V_DIR_SAMPLE</find>
-      <find>BECAPE_DIR</find>
       <find>&quot;</find>
       <find>DB_</find>
       <find>DB_DATABASE</find>
@@ -68,6 +94,26 @@
       <find>/5</find>
       <find>--login-path=backup</find>
       <find>END=$(date +%s)</find>
+      <find>path</find>
+      <find>do</find>
+      <find>BECAPE_HOST</find>
+      <find>BECAPE_PORT</find>
+      <find>BECAPE_DATABASE</find>
+      <find>BECAPE_DATABASE_HOST</find>
+      <find>BECAPE_DATABASE_PORT</find>
+      <find>BECAPE_DATABASE_SCHEMA</find>
+      <find>BECAPE_USER</find>
+      <find>$S3PORT</find>
+      <find>CONTEN_TYPE</find>
+      <find>backup</find>
+      <find>S3HOST</find>
+      <find>S3PORT</find>
+      <find>S3KEY</find>
+      <find>S3SECRET</find>
+      <find>bucket</find>
+      <find>arr</find>
+      <find>BECAPE_DIR_VOLUME</find>
+      <find>data</find>
     </findStrings>
     <replaceStrings>
       <replace>futura</replace>
@@ -86,6 +132,16 @@
       <replace>${BECAPE_DIR_HOME}</replace>
       <replace>variables</replace>
       <replace>/4</replace>
+      <replace>BECAPE_DATABASE_HOST</replace>
+      <replace>BECAPE_DATABASE_PORT</replace>
+      <replace>BECAPE_DATABASE_SCHEMA</replace>
+      <replace>BECAPE_MYSQL_HOST</replace>
+      <replace>BECAPE_MYSQL_PORT</replace>
+      <replace>BECAPE_MYSQL_DATABASE</replace>
+      <replace>CONTEN_TYPE</replace>
+      <replace>CONTENT_TYPE</replace>
+      <replace>TARGET</replace>
+      <replace>BECAPE_MYSQL_USER</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/scripts</dir>
@@ -109,18 +165,20 @@
         <option value="$PROJECT_DIR$/makefile" />
         <option value="$PROJECT_DIR$/scripts/sample.sh" />
         <option value="$PROJECT_DIR$/../futura/api/docker-compose.yml" />
-        <option value="$PROJECT_DIR$/scripts/restore.sh" />
         <option value="$PROJECT_DIR$/scripts/configure.sh" />
         <option value="$PROJECT_DIR$/scripts/ls.sh" />
-        <option value="$PROJECT_DIR$/Dockerfile" />
+        <option value="$PROJECT_DIR$/scripts/restore.sh" />
         <option value="$PROJECT_DIR$/scripts/backup.sh" />
         <option value="$PROJECT_DIR$/scripts/list.sh" />
+        <option value="$PROJECT_DIR$/Dockerfile" />
+        <option value="$PROJECT_DIR$/scripts/upload.sh" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="456" />
     <option name="y" value="251" />
-    <option name="width" value="1366" />
+    <option name="width" value="910" />
     <option name="height" value="488" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -195,9 +253,8 @@
   <component name="SpellCheckerSettings" BundledDictionaries="0" Folders="4" Folder0="$PROJECT_DIR$/../../../Spell/IntelliJ.Portuguese.Brazil.Dictionary-master" Folder1="$PROJECT_DIR$/../../../Spell/IntelliJ.Portuguese.Brazil.Dictionary-master" Folder2="$PROJECT_DIR$/../../../Spell/IntelliJ.Portuguese.Brazil.Dictionary-master" Folder3="$PROJECT_DIR$/../../../Spell/IntelliJ.Portuguese.Brazil.Dictionary-master" CustomDictionaries="4" CustomDictionary0="$PROJECT_DIR$/../../../Spell/IntelliJ.Portuguese.Brazil.Dictionary-master/portuguese-brazil.dic" CustomDictionary1="$PROJECT_DIR$/../../../Spell/IntelliJ.Portuguese.Brazil.Dictionary-master/portuguese-brazil_technical-terms.dic" CustomDictionary2="$PROJECT_DIR$/../../../Spell/IntelliJ.Portuguese.Brazil.Dictionary-master/portuguese-brazil_technical-terms_without-accents.dic" CustomDictionary3="$PROJECT_DIR$/../../../Spell/IntelliJ.Portuguese.Brazil.Dictionary-master/portuguese-brazil_without-accents.dic" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="project-level" UseSingleDictionary="true" />
   <component name="ToolWindowManager">
     <frame x="0" y="36" width="1366" height="732" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22954546" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22954546" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -210,7 +267,7 @@
       <window_info anchor="bottom" id="Database Changes" order="7" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" weight="0.32885906" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32885906" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.3489933" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.3489933" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" weight="0.32998326" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -303,38 +360,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/list.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/restore.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="699">
-          <caret line="69" column="15" lean-forward="true" selection-start-line="69" selection-start-column="15" selection-end-line="69" selection-end-column="15" />
+        <state relative-caret-position="483">
+          <caret line="38" selection-start-line="38" selection-end-line="39" selection-end-column="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/configure.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
+        <state relative-caret-position="735">
           <caret line="35" column="54" selection-start-line="35" selection-start-column="54" selection-end-line="35" selection-end-column="54" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/backup.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1113">
-          <caret line="53" column="21" lean-forward="true" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
+        <state relative-caret-position="274">
+          <caret line="99" column="20" lean-forward="true" selection-start-line="99" selection-start-column="20" selection-end-line="99" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Dockerfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="22" column="52" lean-forward="true" selection-start-line="22" selection-start-column="52" selection-end-line="22" selection-end-column="52" />
+        <state relative-caret-position="274">
+          <caret line="15" column="24" lean-forward="true" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/list.sh">
+    <entry file="file://$PROJECT_DIR$/scripts/upload.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+        <state relative-caret-position="168">
+          <caret line="12" column="28" lean-forward="true" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
         </state>
       </provider>
     </entry>
