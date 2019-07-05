@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-# the base directory
-BECAPE_DIR_VOLUME=/var/www/app
-
-# import .env
-if [[ -f ${BECAPE_DIR_VOLUME}/.env ]]; then
-  source ${BECAPE_DIR_VOLUME}/.env
+# check environment variables
+if [[ ${BECAPE_DATABASE} = "" ]]; then
+  echo "Missing required variables: 'BECAPE_DATABASE'"
+  exit 1
 fi
 
 echo "..................................."
@@ -30,7 +28,7 @@ if [[ -f ${V_DIR_TEMP}/FUNCTION.sql ]]; then
 fi
 # generate FUNCTION dump
 mysqldump --login-path=backup --skip-opt --no-create-info --add-drop-table --no-data --routines\
- ${DB_DATABASE} > ${V_DIR_TEMP}/FUNCTION.sql
+ ${BECAPE_DATABASE} > ${V_DIR_TEMP}/FUNCTION.sql
 echo " ....... ready"
 
 echo -n "2/5 Dumping views"
@@ -40,8 +38,8 @@ if [[ -f ${V_DIR_TEMP}/VIEW.sql ]]; then
 fi
 # generate VIEW dump
 mysql --login-path=backup INFORMATION_SCHEMA --skip-column-names --batch\
- -e "SELECT table_name FROM tables WHERE table_type = 'VIEW' AND table_schema = '${DB_DATABASE}'"  |\
-  xargs mysqldump --login-path=backup ${DB_DATABASE} > ${V_DIR_TEMP}/VIEW.sql
+ -e "SELECT table_name FROM tables WHERE table_type = 'VIEW' AND table_schema = '${BECAPE_DATABASE}'"  |\
+  xargs mysqldump --login-path=backup ${BECAPE_DATABASE} > ${V_DIR_TEMP}/VIEW.sql
 echo " ........... ready"
 
 echo -n "3/5 Dumping tables"
@@ -51,8 +49,8 @@ if [[ -f ${V_DIR_TEMP}/TABLE.sql ]]; then
 fi
 # generate TABLE dump
 mysql --login-path=backup INFORMATION_SCHEMA --skip-column-names --batch\
- -e "SELECT table_name FROM tables WHERE table_type = 'BASE TABLE' AND table_schema = '${DB_DATABASE}'"\
-  | xargs mysqldump --login-path=backup ${DB_DATABASE} > ${V_DIR_TEMP}/TABLE.sql
+ -e "SELECT table_name FROM tables WHERE table_type = 'BASE TABLE' AND table_schema = '${BECAPE_DATABASE}'"\
+  | xargs mysqldump --login-path=backup ${BECAPE_DATABASE} > ${V_DIR_TEMP}/TABLE.sql
 echo " .......... ready"
 
 echo -n "4/5 Encrypt files "
@@ -70,7 +68,7 @@ do
   openssl smime -encrypt -binary -text -aes256\
    -in ${V_DIR_TEMP}/${filename}.sql\
    -out ${V_DIR_TEMP}/${filename}.sql.encrypted\
-   -outform DER /var/www/app/backup.public.pem
+   -outform DER ${BECAPE_DIR_VOLUME}/backup.public.pem
   rm ${V_DIR_TEMP}/${filename}.sql
 done
 echo " .......... ready"

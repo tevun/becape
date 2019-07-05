@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-# the base directory
-BECAPE_DIR_VOLUME=/var/www/app
-
-# import .env
-source ${BECAPE_DIR_VOLUME}/.env
-
 echo "..................................."
 echo $(date)
 echo " - "
@@ -13,12 +7,30 @@ echo " - "
 echo "Starting configure .......... ready"
 START=$(date +%s)
 
-echo "Current '.env' settings"
-echo "Host: ${DB_HOST}"
-echo "Port: ${DB_PORT}"
-echo "User: ${DB_USERNAME}"
+MUST_EXIT=0
+# create array with the files name
+declare -a arr=("BECAPE_HOST", "BECAPE_PORT", "BECAPE_DATABASE", "BECAPE_USER")
+## now loop through the above array
+for variables in "${arr[@]}"
+do
+  if [[ ! ${variables} ]]; then
+    MUST_EXIT=1
+    V_MISSING=", '${variables}'${V_MISSING}"
+  fi
+done
 
-mysql_config_editor set --login-path=backup --host=${DB_HOST} --port=${DB_PORT} --user=${DB_USERNAME} --password
+if [[ ${MUST_EXIT} = 1 ]]; then
+  echo "Missing required environment variables: ${V_MISSING:2}"
+  exit ${MUST_EXIT}
+fi
+
+echo "Environment variables"
+echo "Host: ........${BECAPE_HOST}"
+echo "Port: ....... ${BECAPE_PORT}"
+echo "Database: ... ${BECAPE_DATABASE}"
+echo "User: ........${BECAPE_USER}"
+
+mysql_config_editor set --login-path=backup --host=${BECAPE_HOST} --port=${BECAPE_PORT} --user=${BECAPE_USER} --password
 
 END=$(date +%s)
 TIME=$(( $END - $START ))

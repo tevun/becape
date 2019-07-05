@@ -1,20 +1,26 @@
 FROM mysql:5.7
 
 # Default Settings
-ENV BACKUP_UID 1000
+ENV BECAPE_DIR_VOLUME "/var/www/app"
+ENV BECAPE_DIR_HOME "/home/application"
+ENV BECAPE_HOST ""
+ENV BECAPE_PORT 3306
+ENV BECAPE_DATABASE ""
+ENV BECAPE_USER ""
+ENV BECAPE_UID 1000
 
-RUN adduser --quiet --home /home/application --shell /sbin/nologin --uid ${BACKUP_UID} --disabled-login application
+RUN adduser --quiet --home ${BECAPE_DIR_HOME} --shell /sbin/nologin --uid ${BECAPE_UID} --disabled-login application
 
-COPY --chown=application:application ./scripts /home/application/scripts
-COPY --chown=application:application ./sample /home/application/sample
+COPY --chown=application:application ./scripts ${BECAPE_DIR_HOME}/scripts
+COPY --chown=application:application ./sample ${BECAPE_DIR_HOME}/sample
 
 RUN \
-  ln -s /home/application/scripts/configure.sh /usr/bin/configure &&\
-  ln -s /home/application/scripts/backup.sh /usr/bin/backup &&\
-  ln -s /home/application/scripts/restore.sh /usr/bin/restore &&\
-  mkdir -p /var/www/app &&\
-  chown application:application /var/www/app
+  ln -s ${BECAPE_DIR_HOME}/scripts/configure.sh /usr/bin/configure &&\
+  ln -s ${BECAPE_DIR_HOME}/scripts/backup.sh /usr/bin/backup &&\
+  ln -s ${BECAPE_DIR_HOME}/scripts/restore.sh /usr/bin/restore &&\
+  mkdir -p ${BECAPE_DIR_VOLUME} &&\
+  chown application:application ${BECAPE_DIR_VOLUME}
 
-VOLUME /var/www/app
+VOLUME ${BECAPE_DIR_VOLUME}
 
-CMD /bin/bash /home/application/scripts/sample.sh && tail -f /dev/null
+CMD /bin/bash ${BECAPE_DIR_HOME}/scripts/sample.sh && tail -f /dev/null

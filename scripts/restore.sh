@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-# the base directory
-BECAPE_DIR_VOLUME=/var/www/app
-
-# import .env
-source ${BECAPE_DIR_VOLUME}/.env
-
 echo "..................................."
 echo $(date)
 echo " - "
@@ -19,12 +13,15 @@ if [[ ! -d ${V_DIR_TEMP} ]]; then
   mkdir -p ${V_DIR_TEMP}
 fi
 
-cd ${V_DIR_TEMP}
-
+#
 V_RESTORE_FILE_NAME="2019_07_05_02_28_17" # ${1}
-# openssl smime -decrypt -in encrypted.file -binary -inform DEM -inkey backup.private.pem -out decrypted.file
+#
+cp ${BECAPE_DIR_VOLUME}/data/${V_RESTORE_FILE_NAME}.backup.tgz ${V_DIR_TEMP}/
+#
+cd ${V_DIR_TEMP}
+#
 tar -xzf ${V_RESTORE_FILE_NAME}.backup.tgz
-
+# openssl smime -decrypt -in encrypted.file -binary -inform DEM -inkey backup.private.pem -out decrypted.file
 
 echo " - "
 END=$(date +%s)
