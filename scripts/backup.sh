@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
+
 # the base directory
-V_DIR_BACKUP=/var/www/app
+BECAPE_DIR_VOLUME=/var/www/app
 
 # import .env
-if [[ -f ${V_DIR_BACKUP}.env ]]; then
-  source ${V_DIR_BACKUP}.env
+if [[ -f ${BECAPE_DIR_VOLUME}/.env ]]; then
+  source ${BECAPE_DIR_VOLUME}/.env
 fi
 
 echo "..................................."
@@ -17,7 +18,7 @@ START=$(date +%s)
 # generate a unique name to generate scripts
 UUID=$(cat /proc/sys/kernel/random/uuid)
 # create the tmp dir
-V_DIR_TEMP="${V_DIR_BACKUP}/tmp/${UUID}"
+V_DIR_TEMP="${BECAPE_DIR_VOLUME}/tmp/${UUID}"
 if [[ ! -d ${V_DIR_TEMP} ]]; then
   mkdir -p ${V_DIR_TEMP}
 fi
@@ -78,17 +79,17 @@ echo -n "5/5 Compress data "
 # go to temp dir
 cd ${V_DIR_TEMP}
 # create the name of file
-V_BACKUP_FILE=$(date +"%Y_%m_%d-%H_%M_%S").backup.tgz
+V_BACKUP_FILE=$(date +"%Y_%m_%d_%H_%M_%S").backup.tgz
 # create the backup file and remove the encrypted files
 tar czf ${V_BACKUP_FILE} * --remove-files
 # create the data dir if not exists
-if [[ ! -d ${V_DIR_BACKUP}/data ]]; then
-  mkdir -p ${V_DIR_BACKUP}/data
+if [[ ! -d ${BECAPE_DIR_VOLUME}/data ]]; then
+  mkdir -p ${BECAPE_DIR_VOLUME}/data
 fi
 # move the backup file data dir
-mv ${V_BACKUP_FILE} ${V_DIR_BACKUP}/data
+mv ${V_BACKUP_FILE} ${BECAPE_DIR_VOLUME}/data
 # go to backup dir
-cd ${V_DIR_BACKUP}
+cd ${BECAPE_DIR_VOLUME}
 # remove the temp dir
 rm -rf ${V_DIR_TEMP}
 

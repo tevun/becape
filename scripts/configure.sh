@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-source /var/www/app/.env
+# the base directory
+BECAPE_DIR_VOLUME=/var/www/app
+
+# import .env
+source ${BECAPE_DIR_VOLUME}/.env
 
 echo "..................................."
 echo $(date)
@@ -9,7 +13,7 @@ echo " - "
 echo "Starting configure .......... ready"
 START=$(date +%s)
 
-# openssl req -x509 -sha256 -nodes -newkey rsa:4096 -keyout mysqldump.priv.pem -out mysqldump.pub.pem
+echo "Current '.env' settings"
 echo "Host: ${DB_HOST}"
 echo "Port: ${DB_PORT}"
 echo "User: ${DB_USERNAME}"

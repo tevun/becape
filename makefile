@@ -1,6 +1,6 @@
 build:
 	#  --no-cache
-	docker build -t mysqldump-secure .
+	docker build -t docker.hospic.io/becape/mysql:5.7 .
 
 sh:
 	docker run --rm -it mysqldump-secure sh
