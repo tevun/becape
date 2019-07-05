@@ -1,0 +1,31 @@
+FROM alpine:latest
+
+# https://github.com/khoanguyen96/dockerfiles/blob/master/mysqldump-secure/Dockerfile
+LABEL description="mysqldump-secure" \
+      maintainer="William Correa <wilcorrea@gmail.com>"
+
+RUN apk add --no-cache bash curl mysql-client nano
+
+# Install wait-for-it
+RUN curl --location --output /usr/local/bin/wait-for-it.sh\
+ https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
+  && ln -s usr/local/bin/wait-for-it.sh \
+  && chmod +x /usr/local/bin/wait-for-it.sh
+
+ARG MYSQLDUMP_SECURE_VER=0.16.3
+
+# Build Dependencies
+# Install mysqldump-secure
+RUN apk add --no-cache \
+  build-base \
+  ca-certificates \
+  coreutils \
+  openssl \
+  gzip \
+  zlib \
+  && cd /tmp \
+  && curl -L https://github.com/cytopia/mysqldump-secure/archive/${MYSQLDUMP_SECURE_VER}.tar.gz | tar xvzf - \
+  && cd mysqldump-secure-${MYSQLDUMP_SECURE_VER} && ./configure \
+  && make && make install \
+  && apk del build-base \
+  && rm -rf /tmp/*
