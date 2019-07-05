@@ -31,7 +31,7 @@ fi
 cp ${BECAPE_DIR_DATA}/${V_RESTORE_FILE_NAME}.backup.tgz ${V_DIR_TEMP}/
 cd ${V_DIR_TEMP}
 tar -xzf ${V_RESTORE_FILE_NAME}.backup.tgz
-rm ${V_RESTORE_FILE_NAME}.backup.tgz
+rm -f ${V_RESTORE_FILE_NAME}.backup.tgz
 echo " ... ready"
 
 echo -n "2/4 Decrypting files "
@@ -46,7 +46,7 @@ do
       -out ${V_DIR_TEMP}/${filename}.sql\
       -inform DEM -inkey ${BECAPE_DIR_VOLUME}/backup.private.pem
     # openssl smime -decrypt -in encrypted.file -binary -inform DEM -inkey backup.private.pem -out decrypted.file
-    rm ${V_DIR_TEMP}/${filename}.sql.encrypted
+    rm -f ${V_DIR_TEMP}/${filename}.sql.encrypted
   fi
 done
 echo " ....... ready"

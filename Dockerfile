@@ -41,4 +41,6 @@ RUN \
 
 VOLUME ${BECAPE_DIR_VOLUME}
 
+USER application
+
 CMD /bin/bash ${BECAPE_DIR_HOME}/scripts/sample.sh && tail -f /dev/null
