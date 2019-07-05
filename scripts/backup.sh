@@ -30,7 +30,7 @@ fi
 mysqldump --login-path=backup --force --skip-opt --no-create-info --add-drop-table --no-data --routines\
  ${BECAPE_DATABASE} > ${V_DIR_TEMP}/FUNCTION.sql
 # change file permissions
-chmod 400 ${V_DIR_TEMP}/FUNCTION.sql
+chmod 600 ${V_DIR_TEMP}/FUNCTION.sql
 echo " ....... ready"
 
 echo -n "2/5 Dumping views"
@@ -43,7 +43,7 @@ mysql --login-path=backup --force INFORMATION_SCHEMA --skip-column-names --batch
  -e "SELECT table_name FROM tables WHERE table_type = 'VIEW' AND table_schema = '${BECAPE_DATABASE}'"  |\
   xargs mysqldump --login-path=backup --force ${BECAPE_DATABASE} > ${V_DIR_TEMP}/VIEW.sql
 # change file permissions
-chmod 400 ${V_DIR_TEMP}/VIEW.sql
+chmod 600 ${V_DIR_TEMP}/VIEW.sql
 echo " ........... ready"
 
 echo -n "3/5 Dumping tables"
@@ -56,7 +56,7 @@ mysql --login-path=backup --force INFORMATION_SCHEMA --skip-column-names --batch
  -e "SELECT table_name FROM tables WHERE table_type = 'BASE TABLE' AND table_schema = '${BECAPE_DATABASE}'"\
   | xargs mysqldump --login-path=backup --force ${BECAPE_DATABASE} > ${V_DIR_TEMP}/TABLE.sql
 # change file permissions
-chmod 400 ${V_DIR_TEMP}/TABLE.sql
+chmod 600 ${V_DIR_TEMP}/TABLE.sql
 echo " .......... ready"
 
 echo -n "4/5 Encrypting files"
