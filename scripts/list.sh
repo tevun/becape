@@ -4,10 +4,11 @@ echo "..................................."
 echo $(date)
 echo " - "
 
-echo "Starting ls ...... .......... ready"
+echo "Starting list .... .......... ready"
 START=$(date +%s)
 
-ls -lah --color=always ${BECAPE_DIR_VOLUME}/data
+# ls -lah --color=always ${BECAPE_DIR_VOLUME}/data
+ls -1 ${BECAPE_DIR_VOLUME}/data | sed -e 's/\..*$//'
 
 echo " - "
 END=$(date +%s)
