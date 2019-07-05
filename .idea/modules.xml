@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/becape.iml" filepath="$PROJECT_DIR$/.idea/becape.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../futura/api/.idea/futura-api.iml" filepath="$PROJECT_DIR$/../futura/api/.idea/futura-api.iml" />
     </modules>
   </component>
 </project>

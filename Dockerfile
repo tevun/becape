@@ -18,6 +18,7 @@ RUN \
   ln -s ${BECAPE_DIR_HOME}/scripts/configure.sh /usr/bin/configure &&\
   ln -s ${BECAPE_DIR_HOME}/scripts/backup.sh /usr/bin/backup &&\
   ln -s ${BECAPE_DIR_HOME}/scripts/restore.sh /usr/bin/restore &&\
+  ln -s ${BECAPE_DIR_HOME}/scripts/list.sh /usr/bin/list &&\
   mkdir -p ${BECAPE_DIR_VOLUME} &&\
   chown application:application ${BECAPE_DIR_VOLUME}
 

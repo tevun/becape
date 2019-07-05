@@ -27,8 +27,10 @@ if [[ -f ${V_DIR_TEMP}/FUNCTION.sql ]]; then
   rm ${V_DIR_TEMP}/FUNCTION.sql
 fi
 # generate FUNCTION dump
-mysqldump --login-path=backup --skip-opt --no-create-info --add-drop-table --no-data --routines\
+mysqldump --login-path=backup --force --skip-opt --no-create-info --add-drop-table --no-data --routines\
  ${BECAPE_DATABASE} > ${V_DIR_TEMP}/FUNCTION.sql
+# change file permissions
+chmod 400 ${V_DIR_TEMP}/FUNCTION.sql
 echo " ....... ready"
 
 echo -n "2/5 Dumping views"
@@ -37,9 +39,11 @@ if [[ -f ${V_DIR_TEMP}/VIEW.sql ]]; then
   rm ${V_DIR_TEMP}/VIEW.sql
 fi
 # generate VIEW dump
-mysql --login-path=backup INFORMATION_SCHEMA --skip-column-names --batch\
+mysql --login-path=backup --force INFORMATION_SCHEMA --skip-column-names --batch\
  -e "SELECT table_name FROM tables WHERE table_type = 'VIEW' AND table_schema = '${BECAPE_DATABASE}'"  |\
-  xargs mysqldump --login-path=backup ${BECAPE_DATABASE} > ${V_DIR_TEMP}/VIEW.sql
+  xargs mysqldump --login-path=backup --force ${BECAPE_DATABASE} > ${V_DIR_TEMP}/VIEW.sql
+# change file permissions
+chmod 400 ${V_DIR_TEMP}/VIEW.sql
 echo " ........... ready"
 
 echo -n "3/5 Dumping tables"
@@ -48,12 +52,14 @@ if [[ -f ${V_DIR_TEMP}/TABLE.sql ]]; then
   rm ${V_DIR_TEMP}/TABLE.sql
 fi
 # generate TABLE dump
-mysql --login-path=backup INFORMATION_SCHEMA --skip-column-names --batch\
+mysql --login-path=backup --force INFORMATION_SCHEMA --skip-column-names --batch\
  -e "SELECT table_name FROM tables WHERE table_type = 'BASE TABLE' AND table_schema = '${BECAPE_DATABASE}'"\
-  | xargs mysqldump --login-path=backup ${BECAPE_DATABASE} > ${V_DIR_TEMP}/TABLE.sql
+  | xargs mysqldump --login-path=backup --force ${BECAPE_DATABASE} > ${V_DIR_TEMP}/TABLE.sql
+# change file permissions
+chmod 400 ${V_DIR_TEMP}/TABLE.sql
 echo " .......... ready"
 
-echo -n "4/5 Encrypt files "
+echo -n "4/5 Encrypting files"
 # create array with the files name
 declare -a arr=("FUNCTION" "VIEW" "TABLE")
 
@@ -66,20 +72,22 @@ do
   fi
   # encrypt
   openssl smime -encrypt -binary -text -aes256\
-   -in ${V_DIR_TEMP}/${filename}.sql\
-   -out ${V_DIR_TEMP}/${filename}.sql.encrypted\
-   -outform DER ${BECAPE_DIR_VOLUME}/backup.public.pem
+    -in ${V_DIR_TEMP}/${filename}.sql\
+    -out ${V_DIR_TEMP}/${filename}.sql.encrypted\
+    -outform DER ${BECAPE_DIR_VOLUME}/backup.public.pem
   rm ${V_DIR_TEMP}/${filename}.sql
 done
-echo " .......... ready"
+echo " ........ ready"
 
-echo -n "5/5 Compress data "
+echo -n "5/5 Compressing data"
 # go to temp dir
 cd ${V_DIR_TEMP}
 # create the name of file
 V_BACKUP_FILE=$(date +"%Y_%m_%d_%H_%M_%S").backup.tgz
 # create the backup file and remove the encrypted files
 tar czf ${V_BACKUP_FILE} * --remove-files
+# change file permissions
+chmod 400 ${V_BACKUP_FILE}
 # create the data dir if not exists
 if [[ ! -d ${BECAPE_DIR_VOLUME}/data ]]; then
   mkdir -p ${BECAPE_DIR_VOLUME}/data
@@ -91,7 +99,7 @@ cd ${BECAPE_DIR_VOLUME}
 # remove the temp dir
 rm -rf ${V_DIR_TEMP}
 
-echo " .......... ready"
+echo " ........ ready"
 
 echo " - "
 END=$(date +%s)
