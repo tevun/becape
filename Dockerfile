@@ -13,6 +13,8 @@ ENV BECAPE_DIR_DATA "${BECAPE_DIR_VOLUME}/data"
 ENV BECAPE_DIR_HOME "/home/application"
 ENV BECAPE_UID 1000
 
+ENV BECAPE_LOGIN_PATH "becape"
+
 ENV BECAPE_MYSQL_HOST ""
 ENV BECAPE_MYSQL_PORT 3306
 ENV BECAPE_MYSQL_DATABASE ""
@@ -27,15 +29,25 @@ ENV BECAPE_MINIO_BUCKET ""
 
 RUN adduser --quiet --home ${BECAPE_DIR_HOME} --shell /sbin/nologin --uid ${BECAPE_UID} --disabled-login application
 
-COPY --chown=application:application ./scripts ${BECAPE_DIR_HOME}/scripts
-COPY --chown=application:application ./sample ${BECAPE_DIR_HOME}/sample
+RUN \
+  mkdir -p ${BECAPE_DIR_HOME}/becape &&\
+  chown application:application ${BECAPE_DIR_HOME}/becape
+
+COPY --chown=application:application ./becape.sh ${BECAPE_DIR_HOME}/becape/becape.sh
+COPY --chown=application:application ./scripts ${BECAPE_DIR_HOME}/becape/scripts
+COPY --chown=application:application ./sample ${BECAPE_DIR_HOME}/becape/sample
+
+COPY --chown=application:application ./docker ${BECAPE_DIR_HOME}/becape/docker
 
 RUN \
-  ln -s ${BECAPE_DIR_HOME}/scripts/configure.sh /usr/bin/configure &&\
-  ln -s ${BECAPE_DIR_HOME}/scripts/backup.sh /usr/bin/backup &&\
-  ln -s ${BECAPE_DIR_HOME}/scripts/restore.sh /usr/bin/restore &&\
-  ln -s ${BECAPE_DIR_HOME}/scripts/list.sh /usr/bin/list &&\
-  ln -s ${BECAPE_DIR_HOME}/scripts/upload.sh /usr/bin/upload &&\
+  ln -s ${BECAPE_DIR_HOME}/becape/scripts/backup.sh /usr/bin/backup &&\
+  ln -s ${BECAPE_DIR_HOME}/becape/scripts/configure.sh /usr/bin/configure &&\
+  ln -s ${BECAPE_DIR_HOME}/becape/scripts/cron.sh /usr/bin/cron &&\
+  ln -s ${BECAPE_DIR_HOME}/becape/scripts/list.sh /usr/bin/list &&\
+  ln -s ${BECAPE_DIR_HOME}/becape/scripts/restore.sh /usr/bin/restore &&\
+  ln -s ${BECAPE_DIR_HOME}/becape/scripts/upload.sh /usr/bin/upload
+
+RUN \
   mkdir -p ${BECAPE_DIR_VOLUME} &&\
   chown application:application ${BECAPE_DIR_VOLUME}
 
@@ -43,4 +55,4 @@ VOLUME ${BECAPE_DIR_VOLUME}
 
 USER application
 
-CMD /bin/bash ${BECAPE_DIR_HOME}/scripts/sample.sh && tail -f /dev/null
+CMD /bin/bash ${BECAPE_DIR_HOME}/becape/docker/sample.sh && tail -f /dev/null

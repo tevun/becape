@@ -5,6 +5,11 @@ if [[ ${BECAPE_MYSQL_DATABASE} = "" ]]; then
   echo "Missing required variables: 'BECAPE_MYSQL_DATABASE'"
   exit 1
 fi
+# check private certificate
+if [[ ! -f ${BECAPE_DIR_VOLUME}/backup.private.pem ]]; then
+  echo "Missing required certificate: '${BECAPE_DIR_VOLUME}/backup.private.pem'"
+  exit 1
+fi
 # check backup filename
 V_RESTORE_FILE_NAME=${1} #"2019_07_05_02_28_17"
 if [[ ${V_RESTORE_FILE_NAME} = "" ]]; then
@@ -52,9 +57,9 @@ done
 echo " ....... ready"
 
 echo -n "3/4 Defining database"
-echo "DROP DATABASE IF EXISTS \`${BECAPE_MYSQL_DATABASE}\`" | mysql --login-path=backup --force
-echo "CREATE DATABASE \`${BECAPE_MYSQL_DATABASE}\`" | mysql --login-path=backup --force
-# echo "GRANT ALL PRIVILEGES ON *.* TO 'database'@'%' WITH GRANT OPTION" | mysql --login-path=backup --force
+echo "DROP DATABASE IF EXISTS \`${BECAPE_MYSQL_DATABASE}\`" | mysql --login-path=${BECAPE_LOGIN_PATH} --force
+echo "CREATE DATABASE \`${BECAPE_MYSQL_DATABASE}\`" | mysql --login-path=${BECAPE_LOGIN_PATH} --force
+# echo "GRANT ALL PRIVILEGES ON *.* TO 'database'@'%' WITH GRANT OPTION" | mysql --login-path=${BECAPE_LOGIN_PATH} --force
 # sed -ie 's/ROW_FORMAT=FIXED//g' ${project_data}/${database_name}/TABLE.sql
 echo " ....... ready"
 
@@ -62,7 +67,7 @@ echo -n "4/4 Restoring resources"
 ## now loop through the above array
 for filename in "${arr[@]}"
 do
-  mysql --login-path=backup --force ${BECAPE_MYSQL_DATABASE} < ${V_DIR_TEMP}/${filename}.sql
+  mysql --login-path=${BECAPE_LOGIN_PATH} --force ${BECAPE_MYSQL_DATABASE} < ${V_DIR_TEMP}/${filename}.sql
   rm ${V_DIR_TEMP}/${filename}.sql
 done
 echo " ..... ready"

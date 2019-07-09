@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 # the home directory
-BECAPE_DIR_SAMPLE=${BECAPE_DIR_HOME}/sample
+BECAPE_DIR_SAMPLE=${BECAPE_DIR_HOME}/becape/sample
 
 MUST_EXIT=0
+# the missing list
 V_MISSING=""
 
 # create array with the files name
@@ -19,6 +20,6 @@ do
 done
 
 if [[ ${MUST_EXIT} = 1 ]]; then
-  echo "Missing required files in volume '${BECAPE_DIR_VOLUME}': ${V_MISSING:2}"
-  exit ${MUST_EXIT}
+  echo "Created sample to required files in volume '${BECAPE_DIR_VOLUME}': ${V_MISSING:2}"
+  echo "Without this files some operations can not be executed"
 fi

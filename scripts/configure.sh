@@ -17,6 +17,11 @@ if [[ ${MUST_EXIT} = 1 ]]; then
   exit ${MUST_EXIT}
 fi
 
+# get the user input
+if [[ ! -z ${1} ]]; then
+  BECAPE_LOGIN_PATH=${1}
+fi
+
 echo "..................................."
 echo $(date)
 echo " - "
@@ -25,15 +30,16 @@ echo "Starting configure .......... ready"
 START=$(date +%s)
 
 echo "Environment variables"
-echo "Host: ........${BECAPE_MYSQL_HOST}"
-echo "Port: ....... ${BECAPE_MYSQL_PORT}"
-echo "Database: ... ${BECAPE_MYSQL_DATABASE}"
-echo "User: ........${BECAPE_MYSQL_USER}"
+echo "Login Path: ... ${BECAPE_LOGIN_PATH}"
+echo "Host: ......... ${BECAPE_MYSQL_HOST}"
+echo "Port: ......... ${BECAPE_MYSQL_PORT}"
+echo "Database: ..... ${BECAPE_MYSQL_DATABASE}"
+echo "User: ......... ${BECAPE_MYSQL_USER}"
 
-mysql_config_editor set --login-path=backup --host=${BECAPE_MYSQL_HOST} --port=${BECAPE_MYSQL_PORT} --user=${BECAPE_MYSQL_USER} --password
+mysql_config_editor set --login-path=${BECAPE_LOGIN_PATH} --host=${BECAPE_MYSQL_HOST} --port=${BECAPE_MYSQL_PORT} --user=${BECAPE_MYSQL_USER} --password
 
-echo "Coping new .mylogin.cnf ..... ready"
-cp ${BECAPE_DIR_HOME}/.mylogin.cnf ${BECAPE_DIR_VOLUME}/.mylogin.cnf
+echo "Coping current credentials .. ready"
+cp ~/.mylogin.cnf ${BECAPE_DIR_VOLUME}/.mylogin.cnf.$(date +"%Y_%m_%d_%H_%M_%S")
 
 echo " - "
 END=$(date +%s)

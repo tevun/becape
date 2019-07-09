@@ -5,6 +5,15 @@ if [[ ${BECAPE_MYSQL_DATABASE} = "" ]]; then
   echo "Missing required variables: 'BECAPE_MYSQL_DATABASE'"
   exit 1
 fi
+# check public certificate
+if [[ ! -f ${BECAPE_DIR_VOLUME}/backup.public.pem ]]; then
+  echo "Missing required certificate: '${BECAPE_DIR_VOLUME}/backup.public.pem'"
+  exit 1
+fi
+# check if exists a BECAPE_FILE_IDENTIFIER
+if [[ ${BECAPE_FILE_IDENTIFIER} = "" ]]; then
+  BECAPE_FILE_IDENTIFIER=$(date +"%Y_%m_%d_%H_%M_%S")
+fi
 
 echo "..................................."
 echo $(date)
@@ -27,7 +36,7 @@ if [[ -f ${V_DIR_TEMP}/FUNCTION.sql ]]; then
   rm ${V_DIR_TEMP}/FUNCTION.sql
 fi
 # generate FUNCTION dump
-mysqldump --login-path=backup --force --skip-opt --no-create-info --add-drop-table --no-data --routines\
+mysqldump --login-path=${BECAPE_LOGIN_PATH} --force --skip-opt --no-create-info --add-drop-table --no-data --routines\
  ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/FUNCTION.sql
 # change file permissions
 chmod 600 ${V_DIR_TEMP}/FUNCTION.sql
@@ -39,9 +48,9 @@ if [[ -f ${V_DIR_TEMP}/VIEW.sql ]]; then
   rm ${V_DIR_TEMP}/VIEW.sql
 fi
 # generate VIEW dump
-mysql --login-path=backup --force INFORMATION_SCHEMA --skip-column-names --batch\
+mysql --login-path=${BECAPE_LOGIN_PATH} --force INFORMATION_SCHEMA --skip-column-names --batch\
  -e "SELECT table_name FROM tables WHERE table_type = 'VIEW' AND table_schema = '${BECAPE_MYSQL_DATABASE}'"  |\
-  xargs mysqldump --login-path=backup --force ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/VIEW.sql
+  xargs mysqldump --login-path=${BECAPE_LOGIN_PATH} --force ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/VIEW.sql
 # change file permissions
 chmod 600 ${V_DIR_TEMP}/VIEW.sql
 echo " ........... ready"
@@ -52,9 +61,9 @@ if [[ -f ${V_DIR_TEMP}/TABLE.sql ]]; then
   rm ${V_DIR_TEMP}/TABLE.sql
 fi
 # generate TABLE dump
-mysql --login-path=backup --force INFORMATION_SCHEMA --skip-column-names --batch\
+mysql --login-path=${BECAPE_LOGIN_PATH} --force INFORMATION_SCHEMA --skip-column-names --batch\
  -e "SELECT table_name FROM tables WHERE table_type = 'BASE TABLE' AND table_schema = '${BECAPE_MYSQL_DATABASE}'"\
-  | xargs mysqldump --login-path=backup --force ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/TABLE.sql
+  | xargs mysqldump --login-path=${BECAPE_LOGIN_PATH} --force ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/TABLE.sql
 # change file permissions
 chmod 600 ${V_DIR_TEMP}/TABLE.sql
 echo " .......... ready"
@@ -83,7 +92,7 @@ echo -n "5/5 Compressing data"
 # go to temp dir
 cd ${V_DIR_TEMP}
 # create the name of file
-V_BACKUP_FILE=$(date +"%Y_%m_%d_%H_%M_%S").backup.tgz
+V_BACKUP_FILE=${BECAPE_FILE_IDENTIFIER}.backup.tgz
 # create the backup file and remove the encrypted files
 tar czf ${V_BACKUP_FILE} * --remove-files
 # change file permissions
