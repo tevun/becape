@@ -8,7 +8,7 @@ echo "Starting cron ............... ready"
 START=$(date +%s)
 
 # get the user input
-if [[ ! -z ${1} ]]; then
+if [[ ${BECAPE_LOGIN_PATH} = "" ]]; then
   BECAPE_LOGIN_PATH=${1}
 fi
 
