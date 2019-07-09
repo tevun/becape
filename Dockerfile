@@ -34,6 +34,8 @@ RUN \
   chown application:application ${BECAPE_DIR_HOME}/becape
 
 COPY --chown=application:application ./becape.sh ${BECAPE_DIR_HOME}/becape/becape.sh
+COPY --chown=application:application ./.env.sample ${BECAPE_DIR_HOME}/becape/.env.sample
+
 COPY --chown=application:application ./scripts ${BECAPE_DIR_HOME}/becape/scripts
 COPY --chown=application:application ./sample ${BECAPE_DIR_HOME}/becape/sample
 
