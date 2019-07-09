@@ -18,7 +18,7 @@ if [[ ${MUST_EXIT} = 1 ]]; then
 fi
 
 # get the user input
-if [[ ! -z ${1} ]]; then
+if [[ ! -z ${2} ]]; then
   BECAPE_LOGIN_PATH=${1}
 fi
 
