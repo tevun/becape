@@ -12,6 +12,10 @@ if [[ ${BECAPE_LOGIN_PATH} = "" ]]; then
   BECAPE_LOGIN_PATH=${1}
 fi
 
+if [[ ${BECAPE_SCRIPT_DIR} = "" ]]; then
+  BECAPE_SCRIPT_DIR=${BECAPE_DIR_HOME}/becape/scripts
+fi
+
 BECAPE_FILE_IDENTIFIER=$(date +"%Y_%m_%d_%H_%M_%S")
 source ${BECAPE_SCRIPT_DIR}/backup.sh
 

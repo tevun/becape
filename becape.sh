@@ -3,8 +3,8 @@
 BECAPE_ROOT_DIR=$(dirname $(readlink -f ${0}))
 BECAPE_SCRIPT_DIR=${BECAPE_ROOT_DIR}/scripts
 
-if [[ -f ${BECAPE_SCRIPT_DIR}/.env ]]; then
-  source ${BECAPE_SCRIPT_DIR}/.env
+if [[ -f ${BECAPE_ROOT_DIR}/.env ]]; then
+  source ${BECAPE_ROOT_DIR}/.env
 fi
 
 SOURCE_FILE=${BECAPE_SCRIPT_DIR}/${1}.sh
