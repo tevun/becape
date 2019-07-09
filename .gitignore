@@ -1,8 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 
 # IntelliJ project files
-.idea
-app/*
+/.idea
+/app/*
 /.env
+/becape.zip
 
 !.gitkeep

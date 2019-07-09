@@ -3,6 +3,10 @@
 BECAPE_ROOT_DIR=$(dirname $(readlink -f ${0}))
 BECAPE_SCRIPT_DIR=${BECAPE_ROOT_DIR}/scripts
 
+if [[ -z ${BECAPE_DIR_VOLUME} ]]; then
+  BECAPE_DIR_VOLUME=${BECAPE_ROOT_DIR}/app
+fi
+
 if [[ -f ${BECAPE_ROOT_DIR}/.env ]]; then
   source ${BECAPE_ROOT_DIR}/.env
 fi

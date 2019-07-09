@@ -41,3 +41,6 @@ keys:
 	 -keyout app/backup.private.pem\
 	 -out app/backup.public.pem
 
+zip:
+	git archive --format zip --output becape.zip master
+	scp -P 10222 becape.zip dev@89.207.131.43:/home/dev/becape/becape.zip

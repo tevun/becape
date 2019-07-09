@@ -4,11 +4,12 @@ echo "..................................."
 echo $(date)
 echo " - "
 
-echo "Starting list ............... ready"
+echo "Starting keys ............... ready"
 START=$(date +%s)
 
-# ls -lah --color=always ${BECAPE_DIR_DATA}
-ls -1 ${BECAPE_DIR_DATA} | sed -e 's/\..*$//'
+openssl req -x509 -sha256 -nodes -newkey rsa:4096\
+ -keyout ${BECAPE_DIR_VOLUME}/backup.private.pem\
+ -out ${BECAPE_DIR_VOLUME}/backup.public.pem
 
 echo " - "
 END=$(date +%s)
