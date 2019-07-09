@@ -40,6 +40,7 @@ COPY --chown=application:application ./sample ${BECAPE_DIR_HOME}/becape/sample
 COPY --chown=application:application ./docker ${BECAPE_DIR_HOME}/becape/docker
 
 RUN \
+  ln -s ${BECAPE_DIR_HOME}/becape/becape.sh /usr/bin/becape &&\
   ln -s ${BECAPE_DIR_HOME}/becape/scripts/backup.sh /usr/bin/backup &&\
   ln -s ${BECAPE_DIR_HOME}/becape/scripts/configure.sh /usr/bin/configure &&\
   ln -s ${BECAPE_DIR_HOME}/becape/scripts/cron.sh /usr/bin/cron &&\
