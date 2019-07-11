@@ -1,0 +1,24 @@
+services:
+  project-backup:
+    image: docker.hospic.io/becape/mysql:5.7
+    restart: always
+    container_name: project-backup
+    working_dir: /var/www/app
+    user: application
+    volumes:
+      - .docker/project-backup/storage:/var/www/app
+    #  - .docker/project-backup/storage/.mylogin.cnf:/home/application/.mylogin.cnf
+    depends_on:
+      - project-mysql
+    links:
+      - project-mysql
+    environment:
+      - BECAPE_MYSQL_HOST=project-mysql
+      - BECAPE_MYSQL_DATABASE=project
+      - BECAPE_MYSQL_USER=root
+      - BECAPE_MINIO_PROTOCOL=http
+      - BECAPE_MINIO_HOST=
+      - BECAPE_MINIO_PORT=9000
+      - BECAPE_MINIO_KEY=
+      - BECAPE_MINIO_SECRET=
+      - BECAPE_MINIO_BUCKET=project

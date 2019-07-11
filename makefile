@@ -5,6 +5,7 @@ export
 build:
 	#  --no-cache
 	docker build -t ${BECAPE_IMAGE_NAME}/mysql:5.7 .
+	docker push ${BECAPE_IMAGE_NAME}/mysql:5.7
 
 bash:
 	docker run --rm -it\
