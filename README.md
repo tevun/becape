@@ -8,30 +8,20 @@
 
 Use a command like below to start a new container called `becape`
 ```bash
-# from docker-compose project or global network
-# volume to manipulate backup files
-# volume to previous saved credentials
-# env variable to mysql host target
-# env variable to mysql database target
-# user who will be used in commands
-# the image name
-$ docker run --rm -d --name becape\
- --network=api_default\
+# --network: from docker-compose project or global network
+# -v (${PWD}/app:/var/www/app): volume to manipulate backup files
+# -v (${PWD}/app/.mylogin.cnf:/home/application/.mylogin.cnf): volume to previous saved credentials
+# -e (BECAPE_MYSQL_HOST): env variable to mysql host target
+# -e (BECAPE_MYSQL_DATABASE): env variable to mysql database target
+# -e (BECAPE_MYSQL_USER): user who will be used in commands
+# [docker.hospic.io/becape/mysql:5.7]: the image name, it depends of build
+$ docker run --rm -d\
+ --name becape\
+ --network=<project-backup>\
  -v ${PWD}/app:/var/www/app\
  -v ${PWD}/app/.mylogin.cnf:/home/application/.mylogin.cnf\
- -e BECAPE_MYSQL_HOST=project-mysql\
- -e BECAPE_MYSQL_DATABASE=project\
- -e BECAPE_MYSQL_USER=root\
- docker.hospic.io/becape/mysql:5.7
-```
-
-```bash
-$ docker run --rm -d --name becape\
- --network=host\
- -v ${PWD}/app:/var/www/app\
- -v ${PWD}/app/.mylogin.cnf:/home/application/.mylogin.cnf\
- -e BECAPE_MYSQL_HOST=locahost\
- -e BECAPE_MYSQL_DATABASE=project\
+ -e BECAPE_MYSQL_HOST=<project-backup>\
+ -e BECAPE_MYSQL_DATABASE=<project-backup>\
  -e BECAPE_MYSQL_USER=root\
  docker.hospic.io/becape/mysql:5.7
 ```
