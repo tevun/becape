@@ -15,6 +15,14 @@ if [[ ${BECAPE_FILE_IDENTIFIER} = "" ]]; then
   BECAPE_FILE_IDENTIFIER=$(date +"%Y_%m_%d_%H_%M_%S")
 fi
 
+MYSQL_ACCESS_CREDENTIAL="--login-path=${BECAPE_LOGIN_PATH}"
+if [[ ! -z ${BECAPE_MYSQL_LEGACY} ]]; then
+  MYSQL_ACCESS_CREDENTIAL="--defaults-group-suffix=-${BECAPE_LOGIN_PATH}"
+fi
+if [[ -z ${BECAPE_DIR_DATA} ]]; then
+  BECAPE_DIR_DATA=${BECAPE_DIR_VOLUME}/data
+fi
+
 echo "..................................."
 echo $(date)
 echo " - "
@@ -36,7 +44,7 @@ if [[ -f ${V_DIR_TEMP}/FUNCTION.sql ]]; then
   rm ${V_DIR_TEMP}/FUNCTION.sql
 fi
 # generate FUNCTION dump
-mysqldump --login-path=${BECAPE_LOGIN_PATH} --force --skip-opt --no-create-info --add-drop-table --no-data --routines\
+mysqldump ${MYSQL_ACCESS_CREDENTIAL} --force --skip-opt --no-create-info --add-drop-table --no-data --routines\
  ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/FUNCTION.sql
 # change file permissions
 chmod 600 ${V_DIR_TEMP}/FUNCTION.sql
@@ -48,9 +56,9 @@ if [[ -f ${V_DIR_TEMP}/VIEW.sql ]]; then
   rm ${V_DIR_TEMP}/VIEW.sql
 fi
 # generate VIEW dump
-mysql --login-path=${BECAPE_LOGIN_PATH} --force INFORMATION_SCHEMA --skip-column-names --batch\
+mysql ${MYSQL_ACCESS_CREDENTIAL} --force INFORMATION_SCHEMA --skip-column-names --batch\
  -e "SELECT table_name FROM tables WHERE table_type = 'VIEW' AND table_schema = '${BECAPE_MYSQL_DATABASE}'"  |\
-  xargs mysqldump --login-path=${BECAPE_LOGIN_PATH} --force ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/VIEW.sql
+  xargs mysqldump ${MYSQL_ACCESS_CREDENTIAL} --force ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/VIEW.sql
 # change file permissions
 chmod 600 ${V_DIR_TEMP}/VIEW.sql
 echo " ........... ready"
@@ -61,9 +69,9 @@ if [[ -f ${V_DIR_TEMP}/TABLE.sql ]]; then
   rm ${V_DIR_TEMP}/TABLE.sql
 fi
 # generate TABLE dump
-mysql --login-path=${BECAPE_LOGIN_PATH} --force INFORMATION_SCHEMA --skip-column-names --batch\
+mysql ${MYSQL_ACCESS_CREDENTIAL} --force INFORMATION_SCHEMA --skip-column-names --batch\
  -e "SELECT table_name FROM tables WHERE table_type = 'BASE TABLE' AND table_schema = '${BECAPE_MYSQL_DATABASE}'"\
-  | xargs mysqldump --login-path=${BECAPE_LOGIN_PATH} --force ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/TABLE.sql
+  | xargs mysqldump ${MYSQL_ACCESS_CREDENTIAL} --force ${BECAPE_MYSQL_DATABASE} > ${V_DIR_TEMP}/TABLE.sql
 # change file permissions
 chmod 600 ${V_DIR_TEMP}/TABLE.sql
 echo " .......... ready"

@@ -17,6 +17,14 @@ if [[ ${V_RESTORE_FILE_NAME} = "" ]]; then
   exit 1
 fi
 
+MYSQL_ACCESS_CREDENTIAL="--login-path=${BECAPE_LOGIN_PATH}"
+if [[ ! -z ${BECAPE_MYSQL_LEGACY} ]]; then
+  MYSQL_ACCESS_CREDENTIAL="--defaults-group-suffix=-${BECAPE_LOGIN_PATH}"
+fi
+if [[ -z ${BECAPE_DIR_DATA} ]]; then
+  BECAPE_DIR_DATA=${BECAPE_DIR_VOLUME}/data
+fi
+
 echo "..................................."
 echo $(date)
 echo " - "
@@ -57,9 +65,9 @@ done
 echo " ....... ready"
 
 echo -n "3/4 Defining database"
-echo "DROP DATABASE IF EXISTS \`${BECAPE_MYSQL_DATABASE}\`" | mysql --login-path=${BECAPE_LOGIN_PATH} --force
-echo "CREATE DATABASE \`${BECAPE_MYSQL_DATABASE}\`" | mysql --login-path=${BECAPE_LOGIN_PATH} --force
-# echo "GRANT ALL PRIVILEGES ON *.* TO 'database'@'%' WITH GRANT OPTION" | mysql --login-path=${BECAPE_LOGIN_PATH} --force
+echo "DROP DATABASE IF EXISTS \`${BECAPE_MYSQL_DATABASE}\`" | mysql ${MYSQL_ACCESS_CREDENTIAL} --force
+echo "CREATE DATABASE \`${BECAPE_MYSQL_DATABASE}\`" | mysql ${MYSQL_ACCESS_CREDENTIAL} --force
+# echo "GRANT ALL PRIVILEGES ON *.* TO 'database'@'%' WITH GRANT OPTION" | mysql ${MYSQL_ACCESS_CREDENTIAL} --force
 # sed -ie 's/ROW_FORMAT=FIXED//g' ${project_data}/${database_name}/TABLE.sql
 echo " ....... ready"
 
@@ -67,7 +75,7 @@ echo -n "4/4 Restoring resources"
 ## now loop through the above array
 for filename in "${arr[@]}"
 do
-  mysql --login-path=${BECAPE_LOGIN_PATH} --force ${BECAPE_MYSQL_DATABASE} < ${V_DIR_TEMP}/${filename}.sql
+  mysql ${MYSQL_ACCESS_CREDENTIAL} --force ${BECAPE_MYSQL_DATABASE} < ${V_DIR_TEMP}/${filename}.sql
   rm ${V_DIR_TEMP}/${filename}.sql
 done
 echo " ..... ready"
