@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  mysql-55:
+    container_name: mysql-55
+    image: mysql:5.5
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=database
+    - MYSQL_USER=user
+    - MYSQL_PASSWORD=password

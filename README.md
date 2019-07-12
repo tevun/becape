@@ -72,16 +72,16 @@ nano .env # change the value of BECAPE_IMAGE_NAME property
 
 Add the service in docker-compose.yml
 ```yaml
-  # project-backup
-  project-backup:
+  # <project-backup>
+  <project-backup>:
     image: docker.hospic.io/becape/mysql:5.7
     restart: always
-    container_name: project-backup
+    container_name: <project-backup>
     working_dir: /var/www/app
     user: application
     volumes:
-      - .docker/project-backup/storage:/var/www/app
-    #  - .docker/project-backup/storage/.mylogin.cnf:/home/application/.mylogin.cnf
+      - .docker/<project-backup>/storage:/var/www/app
+      - .docker/<project-backup>/storage/.mylogin.cnf:/home/application/.mylogin.cnf
     depends_on:
       - project-mysql
     links:
@@ -100,25 +100,22 @@ Add the service in docker-compose.yml
 
 Configure connection
 ```bash
-mkdir .docker/project-backup/storage
-docker-compose up -d project-backup
+mkdir -p .docker/<project-backup>/storage
+touch .docker/<project-backup>/storage/.mylogin.cnf
+chmod 600 .docker/<project-backup>/storage/.mylogin.cnf
+docker-compose up -d <project-backup>
 cat docker-compose.yml # jut to show the container settings 
-docker exec -it project-backup configure # type the password used in mysql container
+docker exec -it <project-backup> configure # type the password used in mysql container
 ```
 
 Add connection file as container volume and download public certificate
 ```bash
-docker-compose stop project-backup
-docker-compose rm project-backup
-mv .docker/project-backup/storage/.mylogin.cnf.xxx .docker/project-backup/storage/.mylogin.cnf
-nano docker-compose.yml # uncomment  - .docker/project-backup/storage/.mylogin.cnf:/home/application/.mylogin.cnf
-wget http://89.207.131.43/project/backup.public.pem -O .docker/project-backup/storage/backup.public.pem
-docker-compose up -d project-backup
+wget http://89.207.131.43/<project-backup>/backup.public.pem -O .docker/<project-backup>/storage/backup.public.pem
 ```
 
 Configure cron using `crontab -e`
-```bash
-00 02 * * * /usr/bin/docker exec futura-backup cron > /domains/app.futuragenetics.com/futura-backup.log
+```
+00 02 * * * /usr/bin/docker exec <project-backup> cron > /projects/project/<project-backup>.log
 ```
 
 ### Configure server
