@@ -1,0 +1,4 @@
+AuthName "Members Area"
+AuthType Basic
+AuthUserFile /usr/local/apache2/htppd.passwd
+require valid-user
