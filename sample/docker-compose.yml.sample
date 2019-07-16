@@ -1,6 +1,6 @@
 services:
   project-backup:
-    image: docker.hospic.io/becape/mysql:5.7
+    image: becape/mysql:5.7
     restart: always
     container_name: project-backup
     working_dir: /var/www/app

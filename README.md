@@ -8,13 +8,6 @@
 
 Use a command like below to start a new container called `becape`
 ```bash
-# --network: from docker-compose project or global network
-# -v (${PWD}/app:/var/www/app): volume to manipulate backup files
-# -v (${PWD}/app/.mylogin.cnf:/home/application/.mylogin.cnf): volume to previous saved credentials
-# -e (BECAPE_MYSQL_HOST): env variable to mysql host target
-# -e (BECAPE_MYSQL_DATABASE): env variable to mysql database target
-# -e (BECAPE_MYSQL_USER): user who will be used in commands
-# [docker.hospic.io/becape/mysql:5.7]: the image name, it depends of build
 $ docker run --rm -d\
  --name becape\
  --network=<project-backup>\
@@ -23,7 +16,15 @@ $ docker run --rm -d\
  -e BECAPE_MYSQL_HOST=<project-backup>\
  -e BECAPE_MYSQL_DATABASE=<project-backup>\
  -e BECAPE_MYSQL_USER=root\
- docker.hospic.io/becape/mysql:5.7
+ becape/mysql:5.7
+
+# --network: from docker-compose project or global network
+# -v (${PWD}/app:/var/www/app): volume to manipulate backup files
+# -v (${PWD}/app/.mylogin.cnf:/home/application/.mylogin.cnf): volume to previous saved credentials
+# -e (BECAPE_MYSQL_HOST): env variable to mysql host target
+# -e (BECAPE_MYSQL_DATABASE): env variable to mysql database target
+# -e (BECAPE_MYSQL_USER): user who will be used in commands
+# [becape/mysql:5.7]: the image name, it depends of build
 ```
 
 #### Configure connection
@@ -64,7 +65,7 @@ Add the service in docker-compose.yml
 ```yaml
   # <project-backup>
   <project-backup>:
-    image: docker.hospic.io/becape/mysql:5.7
+    image: becape/mysql:5.7
     restart: always
     container_name: <project-backup>
     working_dir: /var/www/app
@@ -90,17 +91,17 @@ Add the service in docker-compose.yml
 
 Configure connection
 ```bash
-mkdir -p .docker/<project-backup>/storage
-touch .docker/<project-backup>/storage/.mylogin.cnf
-chmod 600 .docker/<project-backup>/storage/.mylogin.cnf
-docker-compose up -d <project-backup>
-cat docker-compose.yml # jut to show the container settings 
-docker exec -it <project-backup> configure # type the password used in mysql container
+mkdir -p '.docker/<project-backup>/storage' && \
+touch '.docker/<project-backup>/storage/.mylogin.cnf' && \
+chmod 600 '.docker/<project-backup>/storage/.mylogin.cnf' && \
+docker-compose up -d '<project-backup>' && \
+cat docker-compose.yml && \ 
+docker exec -it '<project-backup>' configure # type the password used in mysql container
 ```
 
 Add connection file as container volume and download public certificate
 ```bash
-wget http://89.207.131.43/<project-backup>/backup.public.pem -O .docker/<project-backup>/storage/backup.public.pem
+wget --user <user> --password <password> http://89.207.131.43/<project-backup>/backup.public.pem -O .docker/<project-backup>/storage/backup.public.pem
 ```
 
 Configure cron using `crontab -e`
@@ -115,19 +116,19 @@ Configure cron using `crontab -e`
 Go to home of user, the directory `~` and follow the next steps.
 ```bash
 mkdir ~/becape/ && \
-wget http://89.207.131.43/becape.zip && \
+wget --user <user> --password <password> http://89.207.131.43/becape.zip && \
 unzip becape.zip -d ~/becape && \
 cd ~/becape/ && \
 sudo ln -s $(pwd)/becape.sh /usr/bin/becape
 ```
 
-Start the http serve
-```bash
-cd ~/becape/ && \
-touch run && \
-chmod +x run && \
-echo > ""
+Start the httpd server and configure an user and password
+```
+bash ~/becape/bin/httpd.sh && \
+docker exec -it becape-httpd htpasswd -c /usr/local/apache2/htppd.passwd <user>
 ```
 
-
-#### 
+Start the storage server
+```bash
+bash ~/becape/bin/minio.sh
+```
