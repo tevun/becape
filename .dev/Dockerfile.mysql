@@ -1,3 +1,0 @@
-FROM lyseontech/mysql:v5.7
-
-COPY scripts /scripts
